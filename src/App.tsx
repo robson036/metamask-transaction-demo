@@ -1,9 +1,11 @@
 import { useState } from "react";
-import Web3 from "web3";
+
+import Logo from "./assets/metamask-vector.png"
+
 import * as Styles from "./styles"
 
 function App() {
-    const receiverAddress = "0x3D999a02B3B6a963Ca5B5B7e42Fc3bf7E7AAA448"
+    const receiverAddress = "0x3D999a02B3B6a963Ca5B5B7e42Fc3bf7E7AAA449"
     const [account, setAccount] = useState("")
 
 
@@ -16,16 +18,28 @@ function App() {
         const transactionParameters = {
             nonce: '0x00', // ignored by MetaMask
             gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-            gas: '0x2710', // customizable by user during MetaMask confirmation.
+            // gas: '0x2710', // customizable by user during MetaMask confirmation.
             to: receiverAddress, // Required except during contract publications.
             from: window.ethereum.selectedAddress, // must match user's active address.
-            value: Web3.utils.toWei('0.001', 'ether'), // Only required to send ether to the recipient from the initiating external account.
-            chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+            value: `0x${(0.001 * 10 ** 18).toString(16)}`, // Only required to send ether to the recipient from the initiating external account.
+            // chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
         }
 
-        console.log(transactionParameters)
+        try {
+            const txHash = await window.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParameters],
+            });
 
-        return
+
+            if (txHash) {
+                alert(`Transaction sent sucessfull with TX Hash: ${txHash}`)
+            }
+        } catch (error) {
+            if (error.code === 4001) {
+                alert("Transaction sign has been rejected by user")
+            }
+        }
     }
 
 
@@ -36,10 +50,10 @@ function App() {
             </Styles.Header>
             <Styles.Hero>
                 <Styles.CenteredColumn>
-                    <Styles.MetamaskLogoImage src={require("./assets/metamask-vector.png")} alt="" />
+                    <Styles.MetamaskLogoImage src={Logo} alt="" />
                     <Styles.Row>
                         <Styles.Status>{`Status: `}</Styles.Status>
-                        <Styles.StatusValue connected={false}>Disconnected</Styles.StatusValue>
+                        <Styles.StatusValue connected={Boolean(account)}>{account ? "Connected" : "Disconnected"}</Styles.StatusValue>
                     </Styles.Row>
                     {
                         account && <Styles.Row>
@@ -50,7 +64,9 @@ function App() {
 
                     <Styles.Row>
                         <Styles.Button onClick={() => connectToMetamask()}>Connect</Styles.Button>
-                        <Styles.Button onClick={() => sendTransaction()}>Send me some BNB</Styles.Button>
+                        {
+                            account && <Styles.Button onClick={() => sendTransaction()}>Send me 0.001 BNB</Styles.Button>
+                        }
                     </Styles.Row>
                     <Styles.TextAdvice>
                         <Styles.TextAdviceTitle> Attention</Styles.TextAdviceTitle>: This DApp was made For Academic Purposes only. You can send Testnet BNB Dont send real cash.

@@ -12,7 +12,7 @@ const colors = {
 
 export const Container = styled.div`
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: #f9f9f9;
 `
 
@@ -33,7 +33,7 @@ export const PageTitle = styled.h1`
 
 export const Hero = styled.div`
     width: 100%;
-    height: 556px;
+    height: calc(100% - 59px);
     background-color: ${colors.mediumBlue};
     display: flex;
     justify-content: center;
@@ -42,7 +42,7 @@ export const Hero = styled.div`
 
 export const MetamaskLogoImage = styled.img`
     width: 400px;
-    animation: fadeInUp 0.8s linear 0s;
+    animation: fadeIn 0.8s linear 0s;
 `
 
 export const CenteredColumn = styled.div`
@@ -63,7 +63,7 @@ export const Status = styled.span`
     color: #fff;
     font-size: 1.8rem;
     margin: 0 3px;
-    animation: fadeInUp 0.8s linear 0s;
+    animation: fadeInUp 0.1s linear 0s;
 `
 export const StatusValue = styled(Status)`
     color: ${({ connected }: { connected: boolean }) =>
@@ -81,7 +81,7 @@ export const Button = styled.div`
     color: #fff;
     cursor: pointer;
     transition: linear 0.2s;
-    animation: fadeInUp 0.8s linear 0s;
+    animation: fadeInUp 0.1s linear 0s;
 
     &:hover {
         opacity: 0.33;
@@ -99,7 +99,7 @@ export const TextAdvice = styled.h3`
 export const TextAdviceTitle = styled.span`
     color: #f14668;
     font-size: 1rem;
-    animation: fadeInUp 0.8s linear 0s;
+    animation: fadeInUp 0.1s linear 0s;
 `
 
 export const accountInfo = styled(Status)`
